@@ -140,7 +140,7 @@ def get_cover_art(game):
 
 def index(request):
     get_deals()
-    latest_game_deals = Deal.objects.order_by('-pub_date')[:50]
+    latest_game_deals = Deal.objects.order_by('-pub_date')[:10]
     template = loader.get_template('game_deals/index.html')
     context = {
         'latest_game_deals': latest_game_deals,
