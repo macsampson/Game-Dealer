@@ -109,7 +109,6 @@ def make_deal(game, submission, store):
 def get_deals():
     game_deals = reddit.subreddit('GameDeals')
     new_game_deals = game_deals.new(limit=50)
-
     for submission in new_game_deals:
         store = re.search('(?<=\[)(.*?)(?=\])', submission.title).group()
         title, price, discount = parse_title(submission.title)
@@ -133,6 +132,8 @@ def get_cover_art(game):
         'fields': ['cover','name']
     })
     return result
+
+
 
 
 def index(request):
