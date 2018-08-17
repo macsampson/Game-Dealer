@@ -26,7 +26,7 @@ reddit = praw.Reddit(client_id = REDDIT_CLIENT_ID,
 
 
 def parse_title(title):
-    price = re.search('[£$€]\d+(?:\.\d{2})?', title)
+    price = re.search('[£$€]\d+(?:\.\d{2})?[£$€]', title)
     discount = re.search('\d+%', title)
     name = re.search('(?<=\])(.*)', title)
 
@@ -140,7 +140,7 @@ def get_cover_art(game):
 
 def index(request):
     get_deals()
-    latest_game_deals = Deal.objects.order_by('-pub_date')[:10]
+    latest_game_deals = Deal.objects.order_by('-pub_date')[:50]
     template = loader.get_template('game_deals/index.html')
     context = {
         'latest_game_deals': latest_game_deals,
