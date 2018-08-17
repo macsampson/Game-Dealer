@@ -7,6 +7,6 @@ class Deal(models.Model):
     store = models.CharField(max_length=200)
     price = models.CharField(max_length=50)
     discount = models.CharField(max_length=5, default='N/A')
-    link = models.CharField(max_length=200)
+    link = models.CharField(max_length=500)
     pub_date = models.DateTimeField('date reported')
     cover_hash = models.CharField(max_length=200, primary_key=True)
