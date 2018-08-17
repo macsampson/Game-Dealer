@@ -24,7 +24,7 @@ reddit = praw.Reddit(client_id = REDDIT_CLIENT_ID,
 
 
 def parse_title(title):
-    price = re.search('[£$€]\d+(?:\.\d{2})?', title)
+    price = re.search('[£$€]\d+(?:\.\d{2})?[£$€]', title)
     discount = re.search('\d+%', title)
     name = re.search('(?<=\])(.*)', title)
 
@@ -60,6 +60,11 @@ def make_deal(game, submission, store):
     
     title, price, discount = parse_title(game)
 
+    # This is a workaround for not including the name of the sale in the results
+    # TODO find a way to categorize sales
+    if price == "N/A" and discount == "N/A":
+        return
+
     rep = {"Daily Deal:": "", "Daily Deal - ": "","Daily Deal": ""}
     # use these three lines to do the replacement
     rep = dict((re.escape(k), v) for k, v in rep.items())
@@ -67,7 +72,7 @@ def make_deal(game, submission, store):
     title = pattern.sub(lambda m: rep[re.escape(m.group(0))], title)
 
     # Remove all currency values, discount percentages and strings within brackets
-    regex = ['[£$€]\d+(?:\.\d{2})?','\d+%','\(.*\)']
+    regex = ['[£$€]*\d+(?:\.\d{2})?[£$€]*','\d+%','\(.*\)']
     title = clean_text(regex, title)
 
     # Check to see if there are any games in the db with the same title
@@ -91,7 +96,6 @@ def make_deal(game, submission, store):
     else:
         print("Game already in db")
         
-
     # Set deal attr and insert it into db
     deal.game = title
     deal.price = price
@@ -133,7 +137,7 @@ def get_cover_art(game):
 
 def index(request):
     get_deals()
-    latest_game_deals = Deal.objects.order_by('-pub_date')[:10]
+    latest_game_deals = Deal.objects.order_by('-pub_date')[:50]
     template = loader.get_template('game_deals/index.html')
     context = {
         'latest_game_deals': latest_game_deals,
