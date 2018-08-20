@@ -15,18 +15,18 @@ import re
 
 from igdb_api_python.igdb import igdb
 
-from .keys import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, IGDB_KEY, REDDIT_PW, REDDIT_USER
+from .keys import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, IGDB_KEY, REDDIT_PW, REDDIT_USER, USER_AGENT
 
 
 reddit = praw.Reddit(client_id = REDDIT_CLIENT_ID,
                      client_secret = REDDIT_CLIENT_SECRET, 
-                     user_agent = 'scrappy', 
+                     user_agent = USER_AGENT, 
                      username = REDDIT_USER, 
                      password = REDDIT_PW)
 
 
 def parse_title(title):
-    price = re.search('[£$€]\d+(?:\.\d{2})?[£$€]', title)
+    price = re.search('[£$€]\d+(?:\.\d{2})?[£$€]*', title)
     discount = re.search('\d+%', title)
     name = re.search('(?<=\])(.*)', title)
 
