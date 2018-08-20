@@ -13,6 +13,8 @@ import datetime as dt
 import openpyxl
 import re
 
+from igdb_api_python.igdb import igdb
+
 from .keys import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, IGDB_KEY, REDDIT_PW, REDDIT_USER
 
 
@@ -24,7 +26,7 @@ reddit = praw.Reddit(client_id = REDDIT_CLIENT_ID,
 
 
 def parse_title(title):
-    price = re.search('[£$€]\d+(?:\.\d{2})?[£$€]', title)
+    price = re.search('[£$€]\d+(?:\.\d{2})?', title)
     discount = re.search('\d+%', title)
     name = re.search('(?<=\])(.*)', title)
 
@@ -108,7 +110,7 @@ def make_deal(game, submission, store):
 
 def get_deals():
     game_deals = reddit.subreddit('GameDeals')
-    new_game_deals = game_deals.new(limit=50)
+    new_game_deals = game_deals.new(limit=5)
     for submission in new_game_deals:
         store = re.search('(?<=\[)(.*?)(?=\])', submission.title).group()
         title, price, discount = parse_title(submission.title)
