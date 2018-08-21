@@ -93,13 +93,12 @@ def make_deal(game, submission, store):
                 print("No cover today, brother")
                 pass
         deal.cover_hash = cover_image_hash
-        
+        deal.game = game['name']
         print(igdb_result.body)
     else:
         print("Game already in db")
         
     # Set deal attr and insert it into db
-    deal.game = title
     deal.price = price
     deal.store = store 
     deal.discount = discount 
